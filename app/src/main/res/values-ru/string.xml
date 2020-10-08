@@ -2,5 +2,6 @@
 <resources>
     <string name="app_name">Привет, мир!</string>
     <string name="greeting_text">Приветствие!</string>
-    <string name="button_text">Покажи картинку</string>
+    <string name="citiesButtonText">Выбрать город</string>
+    <string name="citiesButtonCloseText">Закрыть</string>
 </resources>
