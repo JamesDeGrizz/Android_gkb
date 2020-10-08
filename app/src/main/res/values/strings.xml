@@ -2,5 +2,12 @@
     <string name="app_name">Hello world</string>
     <string name="greeting_text">Greetings!</string>
     <string name="citiesButtonText">Choose city</string>
+
+    <string name="citiesTextViewUnknownText">Unknown</string>
+
+    <string name="citiesMoscowLabelText">Moscow</string>
+    <string name="citiesPetersburgLabelText">Petersburg</string>
+    <string name="citiesVolgogradLabelText">Volgograd</string>
+    <string name="citiesKazanLabelText">Kazan</string>
     <string name="citiesButtonCloseText">Close</string>
 </resources>

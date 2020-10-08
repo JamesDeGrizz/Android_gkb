@@ -3,5 +3,12 @@
     <string name="app_name">Привет, мир!</string>
     <string name="greeting_text">Приветствие!</string>
     <string name="citiesButtonText">Выбрать город</string>
+
+    <string name="citiesTextViewUnknownText">Неизвестно</string>
+
+    <string name="citiesMoscowLabelText">Москва</string>
+    <string name="citiesPetersburgLabelText">Санкт Петербург</string>
+    <string name="citiesVolgogradLabelText">Волгоград</string>
+    <string name="citiesKazanLabelText">Казань</string>
     <string name="citiesButtonCloseText">Закрыть</string>
 </resources>
