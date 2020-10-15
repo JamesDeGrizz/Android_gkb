@@ -4,6 +4,9 @@
     <string name="citiesButtonText">Choose city</string>
 
     <string name="citiesTextViewUnknownText">Unknown</string>
+    <string name="temperatureTextViewUnknownText">Unknown</string>
+    <string name="infoTextViewUnknownText">Unknown</string>
+    <string name="infoTextViewClickMeText">Click me!</string>
 
     <string name="citiesMoscowLabelText">Moscow</string>
     <string name="citiesPetersburgLabelText">Petersburg</string>

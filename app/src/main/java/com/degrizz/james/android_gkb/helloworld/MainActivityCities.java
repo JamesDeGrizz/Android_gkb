@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivityCities extends AppCompatActivity {
+public class MainActivityCities extends AppCompatActivity implements Constants {
     private String logTag = "MainActivityCities";
 
     @Override
@@ -33,39 +33,36 @@ public class MainActivityCities extends AppCompatActivity {
 
         ImageView moscowView = findViewById(R.id.imageViewMoscow);
         moscowView.setOnClickListener((View v) -> {
-            Toast.makeText(getApplicationContext(), "MainActivityCities moscowView clicked", Toast.LENGTH_SHORT).show();
-            Log.d(logTag, "MainActivityCities moscowView clicked");
-            updateCity(getString(R.string.citiesMoscowLabelText));
-            setResult(RESULT_OK, intent);
-            finish();
+            onClickListenerInternal("moscowView", getString(R.string.citiesMoscowLabelText), intent);
         });
 
         ImageView petersburgView = findViewById(R.id.imageViewPeterburg);
         petersburgView.setOnClickListener((View v) -> {
-            Toast.makeText(getApplicationContext(), "MainActivityCities petersburgView clicked", Toast.LENGTH_SHORT).show();
-            Log.d(logTag, "MainActivityCities petersburgView clicked");
-            updateCity(getString(R.string.citiesPetersburgLabelText));
-            setResult(RESULT_OK, intent);
-            finish();
+            onClickListenerInternal("petersburgView", getString(R.string.citiesPetersburgLabelText), intent);
         });
 
         ImageView volgogradView = findViewById(R.id.imageViewVolgograd);
         volgogradView.setOnClickListener((View v) -> {
-            Toast.makeText(getApplicationContext(), "MainActivityCities volgogradView clicked", Toast.LENGTH_SHORT).show();
-            Log.d(logTag, "MainActivityCities volgogradView clicked");
-            updateCity(getString(R.string.citiesVolgogradLabelText));
-            setResult(RESULT_OK, intent);
-            finish();
+            onClickListenerInternal("volgogradView", getString(R.string.citiesVolgogradLabelText), intent);
         });
 
         ImageView kazanView = findViewById(R.id.imageViewKazan);
         kazanView.setOnClickListener((View v) -> {
-            Toast.makeText(getApplicationContext(), "MainActivityCities kazanView clicked", Toast.LENGTH_SHORT).show();
-            Log.d(logTag, "MainActivityCities kazanView clicked");
-            updateCity(getString(R.string.citiesKazanLabelText));
-            setResult(RESULT_OK, intent);
-            finish();
+            onClickListenerInternal("kazanView", getString(R.string.citiesKazanLabelText), intent);
         });
+    }
+
+    private void onClickListenerInternal(String viewClicked, String newCityName, Intent result) {
+        Toast.makeText(getApplicationContext(), "MainActivityCities " + viewClicked + " clicked", Toast.LENGTH_SHORT).show();
+        Log.d(logTag, "MainActivityCities " + viewClicked + " clicked");
+        updateCity(newCityName);
+
+        result.putExtra(updatedCityName, newCityName);
+        result.putExtra(updatedTemperatureName, getTemperatureStub(newCityName));
+        result.putExtra(updatedInfoLinkName, getCityInfoStub(newCityName));
+
+        setResult(citiesActivityResult, result);
+        finish();
     }
 
     private void updateCity(String newValue) {
@@ -73,5 +70,37 @@ public class MainActivityCities extends AppCompatActivity {
             Log.d(logTag, "MainActivityCities update AppData.city with value " + newValue);
             AppData.getInstance().city = newValue;
         }
+    }
+
+    private int getTemperatureStub(String cityName) {
+        if (cityName == getString(R.string.citiesMoscowLabelText)) {
+            return 20;
+        }
+        if (cityName == getString(R.string.citiesPetersburgLabelText)) {
+            return 15;
+        }
+        if (cityName == getString(R.string.citiesVolgogradLabelText)) {
+            return 25;
+        }
+        if (cityName == getString(R.string.citiesKazanLabelText)) {
+            return 22;
+        }
+        return 1000;
+    }
+
+    private String getCityInfoStub(String cityName) {
+        if (cityName == getString(R.string.citiesMoscowLabelText)) {
+            return "https://en.wikipedia.org/wiki/Moscow";
+        }
+        if (cityName == getString(R.string.citiesPetersburgLabelText)) {
+            return "https://en.wikipedia.org/wiki/Saint_Petersburg";
+        }
+        if (cityName == getString(R.string.citiesVolgogradLabelText)) {
+            return "https://en.wikipedia.org/wiki/Volgograd";
+        }
+        if (cityName == getString(R.string.citiesKazanLabelText)) {
+            return "https://en.wikipedia.org/wiki/Kazan";
+        }
+        return "https://www.merriam-webster.com/dictionary/in%20the%20middle%20of%20nowhere";
     }
 }

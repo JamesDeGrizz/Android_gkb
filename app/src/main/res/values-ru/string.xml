@@ -5,6 +5,9 @@
     <string name="citiesButtonText">Выбрать город</string>
 
     <string name="citiesTextViewUnknownText">Неизвестно</string>
+    <string name="temperatureTextViewUnknownText">Неизвестно</string>
+    <string name="infoTextViewUnknownText">Неизвестно</string>
+    <string name="infoTextViewClickMeText">Нажми меня!</string>
 
     <string name="citiesMoscowLabelText">Москва</string>
     <string name="citiesPetersburgLabelText">Санкт Петербург</string>
