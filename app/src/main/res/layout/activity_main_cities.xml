@@ -7,60 +7,10 @@
     android:layout_weight="100"
     tools:context=".MainActivityCities">
 
-    <ImageView
-        android:id="@+id/imageViewMoscow"
-        android:layout_width="208dp"
-        android:layout_height="136dp"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/moscow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageViewPeterburg"
-        android:layout_width="202dp"
-        android:layout_height="131dp"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/peterburg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/imageViewMoscow"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageViewVolgograd"
-        android:layout_width="209dp"
-        android:layout_height="128dp"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/volgograd"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewMoscow" />
-
-    <ImageView
-        android:id="@+id/imageViewKazan"
-        android:layout_width="201dp"
-        android:layout_height="127dp"
-        android:layout_marginTop="4dp"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/kazan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.991"
-        app:layout_constraintStart_toEndOf="@id/imageViewVolgograd"
-        app:layout_constraintTop_toBottomOf="@id/imageViewPeterburg" />
-
-    <Button
-        android:id="@+id/buttonCitiesClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/citiesButtonCloseText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+    <fragment android:name="com.degrizz.james.android_gkb.helloworld.FragmentCities"
+        android:id="@+id/cities"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
