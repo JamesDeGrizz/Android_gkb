@@ -7,6 +7,8 @@
     <string name="citiesTextViewUnknownText">Неизвестно</string>
     <string name="temperatureTextViewUnknownText">Неизвестно</string>
     <string name="infoTextViewUnknownText">Неизвестно</string>
+    <string name="onDayTextView">На день</string>
+    <string name="onWeekTextView">На неделю</string>
     <string name="infoTextViewClickMeText">Нажми меня!</string>
 
     <string name="citiesMoscowLabelText">Москва</string>

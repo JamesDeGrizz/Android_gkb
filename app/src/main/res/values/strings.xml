@@ -1,11 +1,13 @@
 <resources>
-    <string name="app_name">Hello world</string>
+    <string name="app_name">Weather Oracle</string>
     <string name="greeting_text">Greetings!</string>
     <string name="citiesButtonText">Choose city</string>
 
     <string name="citiesTextViewUnknownText">Unknown</string>
     <string name="temperatureTextViewUnknownText">Unknown</string>
     <string name="infoTextViewUnknownText">Unknown</string>
+    <string name="onDayTextView">On day</string>
+    <string name="onWeekTextView">On week</string>
     <string name="infoTextViewClickMeText">Click me!</string>
 
     <string name="citiesMoscowLabelText">Moscow</string>
@@ -13,6 +15,40 @@
     <string name="citiesVolgogradLabelText">Volgograd</string>
     <string name="citiesKazanLabelText">Kazan</string>
     <string name="citiesButtonCloseText">Close</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="weekly_days">
+        <item>22 october</item>
+        <item>23 october</item>
+        <item>23 october</item>
+        <item>24 october</item>
+        <item>25 october</item>
+        <item>26 october</item>
+    </string-array>
+
+    <string-array name="weekly_temperature">
+        <item>+8</item>
+        <item>+7</item>
+        <item>+5</item>
+        <item>+7</item>
+        <item>+3</item>
+        <item>+4</item>
+    </string-array>
+
+    <string-array name="daily_hours">
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+    </string-array>
+
+    <string-array name="daily_temperature">
+        <item>+10</item>
+        <item>+11</item>
+        <item>+10</item>
+        <item>+9</item>
+        <item>+9</item>
+        <item>+8</item>
+    </string-array>
 </resources>
