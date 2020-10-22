@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="100"
     android:orientation="vertical">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="40"
+        android:layout_weight="10"
         tools:context=".FragmentMain">
 
         <!-- Location -->
@@ -84,7 +83,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dayTempView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="10"
         android:orientation="horizontal"
         tools:listitem="@layout/day_temp_item">
@@ -102,7 +101,7 @@
         android:id="@+id/weeklyTempView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="30"
+        android:layout_weight="10"
         android:orientation="vertical"
         tools:listitem="@layout/weekly_temp_item">
     </androidx.recyclerview.widget.RecyclerView>

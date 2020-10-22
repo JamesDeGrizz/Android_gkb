@@ -20,7 +20,7 @@ public class DayTempAdapter extends RecyclerView.Adapter<DayTempAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.weekly_temp_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.day_temp_item, parent, false);
         return new ViewHolder(view);
     }
 
