@@ -9,7 +9,13 @@
     <string name="infoTextViewUnknownText">Неизвестно</string>
     <string name="onDayTextView">На день</string>
     <string name="onWeekTextView">На неделю</string>
+    <string name="bottom_menu_location">Местоположение</string>
+    <string name="bottom_menu_layout">О разработчике</string>
     <string name="infoTextViewClickMeText">Нажми меня!</string>
+
+    <string name="snackbar_non_clickable">Ненажимабельно</string>
+    <string name="snackbar_location_warning">Сначала укажите местоположение</string>
+    <string name="snackbar_about_test">Инфо</string>
 
     <string name="citiesMoscowLabelText">Москва</string>
     <string name="citiesPetersburgLabelText">Санкт Петербург</string>
