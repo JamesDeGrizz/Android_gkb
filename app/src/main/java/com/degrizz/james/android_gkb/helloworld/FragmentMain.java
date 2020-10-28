@@ -11,20 +11,39 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.degrizz.james.android_gkb.helloworld.Model.WeatherRequest;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class FragmentMain extends Fragment implements Constants {
+
+    private static final String TAG = "FragmentMain";
+    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?lat=55.75&lon=37.62&appid=";
+    private static final String WEATHER_API_KEY = "111902f1f720ba037f96c0c4cbb1155d";
+    private final float KELVINS = 273.15f;
 
     public FragmentMain() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        gmph();
     }
 
     @Override
@@ -99,5 +118,39 @@ public class FragmentMain extends Fragment implements Constants {
 
         DayTempAdapter adapter = new DayTempAdapter(hours, temperatures);
         dailyView.setAdapter(adapter);
+    }
+
+    private void gmph() {
+        try {
+            final URL uri = new URL(WEATHER_URL + WEATHER_API_KEY);
+            final Handler handler = new Handler();
+            new Thread(() -> {
+                HttpsURLConnection urlConnection = null;
+                try {
+                    urlConnection = (HttpsURLConnection) uri.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setReadTimeout(10000);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    String result = getLines(in);
+                    Gson gson = new Gson();
+                    final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
+                    handler.post(() -> {float f = weatherRequest.getMain().getTemp();});
+                } catch (Exception e) {
+                    Log.e(TAG, "Fail connection", e);
+                    e.printStackTrace();
+                } finally {
+                    if (null != urlConnection) {
+                        urlConnection.disconnect();
+                    }
+                }
+            }).start();
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "Fail URI", e);
+            e.printStackTrace();
+        }
+    }
+
+    private String getLines(BufferedReader in) {
+        return in.lines().collect(Collectors.joining("\n"));
     }
 }
