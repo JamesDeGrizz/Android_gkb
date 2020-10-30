@@ -34,7 +34,6 @@ public class FragmentMain extends Fragment implements Constants {
 
     private static final String TAG = "FragmentMain";
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?lat=55.75&lon=37.62&appid=";
-    private static final String WEATHER_API_KEY = "111902f1f720ba037f96c0c4cbb1155d";
     private final float KELVINS = 273.15f;
 
     public FragmentMain() {}
@@ -122,7 +121,7 @@ public class FragmentMain extends Fragment implements Constants {
 
     private void gmph() {
         try {
-            final URL uri = new URL(WEATHER_URL + WEATHER_API_KEY);
+            final URL uri = new URL(WEATHER_URL + BuildConfig.WEATHER_API_KEY);
             final Handler handler = new Handler();
             new Thread(() -> {
                 HttpsURLConnection urlConnection = null;
