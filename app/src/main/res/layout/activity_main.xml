@@ -5,9 +5,9 @@
     android:screenOrientation="portrait"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activities.MainActivity">
 
-    <fragment android:name="com.degrizz.james.android_gkb.helloworld.FragmentMain"
+    <fragment android:name="com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain"
         android:id="@+id/main"
         android:layout_weight="1"
         android:layout_width="match_parent"

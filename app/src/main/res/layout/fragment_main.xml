@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="10"
-        tools:context=".FragmentMain">
+        tools:context=".Fragments.FragmentMain">
 
         <!-- Location -->
         <ImageView
@@ -78,6 +78,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:gravity="left"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/design_default_color_primary"
         android:text="@string/onDayTextView"
         android:textSize="28sp" />
 
@@ -86,6 +89,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="10"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal"
         tools:listitem="@layout/day_temp_item">
     </androidx.recyclerview.widget.RecyclerView>
@@ -95,6 +100,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:gravity="left"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/design_default_color_primary"
         android:text="@string/onWeekTextView"
         android:textSize="28sp" />
 
@@ -104,6 +112,8 @@
         android:layout_height="match_parent"
         android:layout_weight="10"
         android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         tools:listitem="@layout/weekly_temp_item">
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -113,10 +123,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:background="?android:attr/windowBackground"
+        android:background="@color/design_default_color_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_menu_layout" />
+    <!--android:background="?android:attr/windowBackground"-->
+
 
 </LinearLayout>
