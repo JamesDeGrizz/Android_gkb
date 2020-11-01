@@ -1,14 +1,14 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Models;
 
 public class Wind {
-    private int speed;
+    private float speed;
     private int deg;
 
-    public int getSpeed() {
+    public float getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
 

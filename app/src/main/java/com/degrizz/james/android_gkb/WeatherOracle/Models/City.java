@@ -1,11 +1,20 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Models;
 
-public class City {
+import java.io.Serializable;
+
+public class City implements Serializable {
     private int id;
     private String name;
     private String state;
     private String country;
-    private Coord coord;
+    private transient Coord coord;
+
+    public City(int id, String name, String state, String country) {
+        this.id = id;
+        this.name = name;
+        this.state = state;
+        this.country = country;
+    }
 
     public int getId() {
         return id;

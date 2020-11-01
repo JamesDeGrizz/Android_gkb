@@ -22,6 +22,7 @@
     <string name="snackbar_non_clickable">Non-clickable</string>
     <string name="snackbar_location_warning">Choose location first</string>
     <string name="snackbar_about_test">About</string>
+    <string name="cityFilter">filter</string>
 
     <string-array name="weekly_days">
         <item>22 october</item>

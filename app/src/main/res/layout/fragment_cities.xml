@@ -1,46 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.FragmentCities">
+    tools:context=".Fragments.FragmentCities"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageViewMoscow"
-        android:layout_width="208dp"
-        android:layout_height="136dp"
-        android:layout_gravity="top|left"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/moscow" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cityFilterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imageViewPeterburg"
-        android:layout_width="208dp"
-        android:layout_height="136dp"
-        android:layout_gravity="top|right"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/peterburg" />
+        <EditText
+            android:id="@+id/cityFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hint="@string/cityFilter" />
 
-    <ImageView
-        android:id="@+id/imageViewVolgograd"
-        android:layout_width="208dp"
-        android:layout_height="136dp"
-        android:layout_gravity="center|right"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/volgograd"
-        />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageView
-        android:id="@+id/imageViewKazan"
-        android:layout_width="208dp"
-        android:layout_height="136dp"
-        android:layout_gravity="center|left"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/kazan" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/citiesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        tools:listitem="@layout/city_chooser_item">
+    </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonCitiesClose"
@@ -51,4 +41,4 @@
         android:layout_marginBottom="16dp"
         android:text="@string/citiesButtonCloseText" />
 
-</FrameLayout>
+</LinearLayout>

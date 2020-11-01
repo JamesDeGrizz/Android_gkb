@@ -6,17 +6,39 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.degrizz.james.android_gkb.WeatherOracle.Adapters.CityChooserAdapter;
+import com.degrizz.james.android_gkb.WeatherOracle.Adapters.WeeklyTempAdapter;
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
+import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FragmentCities extends Fragment implements Constants {
     private String logTag = "FragmentCities";
@@ -26,16 +48,17 @@ public class FragmentCities extends Fragment implements Constants {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cities, container, false);
+        View view = inflater.inflate(R.layout.fragment_cities, container, false);
+
+        ArrayList<City> cities = loadCitiesList(view);
+        initCitiesView(view, cities);
+        return view;
     }
 
     @Override
@@ -51,67 +74,53 @@ public class FragmentCities extends Fragment implements Constants {
             getActivity().finish();
         });
 
-        ImageView moscowView = view.findViewById(R.id.imageViewMoscow);
-        moscowView.setOnClickListener((View v) -> {
-            onClickListenerInternal("moscowView", getString(R.string.citiesMoscowLabelText), intent);
-        });
+        final TextInputLayout cityFilterLayout = (TextInputLayout) view.findViewById(R.id.cityFilterLayout);
+        cityFilterLayout.getEditText().addTextChangedListener(new TextWatcher() {
 
-        ImageView petersburgView = view.findViewById(R.id.imageViewPeterburg);
-        petersburgView.setOnClickListener((View v) -> {
-            onClickListenerInternal("petersburgView", getString(R.string.citiesPetersburgLabelText), intent);
-        });
+            @Override
+            public void onTextChanged(CharSequence text, int start, int count, int after) {
+            }
 
-        ImageView volgogradView = view.findViewById(R.id.imageViewVolgograd);
-        volgogradView.setOnClickListener((View v) -> {
-            onClickListenerInternal("volgogradView", getString(R.string.citiesVolgogradLabelText), intent);
-        });
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        ImageView kazanView = view.findViewById(R.id.imageViewKazan);
-        kazanView.setOnClickListener((View v) -> {
-            onClickListenerInternal("kazanView", getString(R.string.citiesKazanLabelText), intent);
+            @Override
+            public void afterTextChanged(Editable s) {
+                String filter = s.toString();
+                RecyclerView citiesView = view.findViewById(R.id.citiesView);
+                CityChooserAdapter adapter = (CityChooserAdapter)citiesView.getAdapter();
+                adapter.setFilter(filter);
+            }
         });
     }
 
-    private void onClickListenerInternal(String viewClicked, String newCityName, Intent result) {
-        Log.d(logTag, "MainActivityCities " + viewClicked + " clicked");
+    private void initCitiesView(View view, ArrayList<City> cities) {
+        RecyclerView citiesView = view.findViewById(R.id.citiesView);
+        citiesView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        citiesView.setLayoutManager(layoutManager);
 
-        result.putExtra(updatedCityName, newCityName);
-        result.putExtra(updatedTemperatureName, getTemperatureStub(newCityName));
-        result.putExtra(updatedInfoLinkName, getCityInfoStub(newCityName));
-
-        getActivity().setResult(citiesActivityResult, result);
-        getActivity().finish();
+        CityChooserAdapter adapter = new CityChooserAdapter(cities, this);
+        citiesView.setAdapter(adapter);
     }
 
-    private int getTemperatureStub(String cityName) {
-        if (cityName == getString(R.string.citiesMoscowLabelText)) {
-            return 20;
-        }
-        if (cityName == getString(R.string.citiesPetersburgLabelText)) {
-            return 15;
-        }
-        if (cityName == getString(R.string.citiesVolgogradLabelText)) {
-            return 25;
-        }
-        if (cityName == getString(R.string.citiesKazanLabelText)) {
-            return 22;
-        }
-        return 1000;
-    }
+    private ArrayList<City> loadCitiesList(View view) {
+        try {
+            InputStream is = view.getContext().getAssets().open("city.list.json");
 
-    private String getCityInfoStub(String cityName) {
-        if (cityName == getString(R.string.citiesMoscowLabelText)) {
-            return "https://en.wikipedia.org/wiki/Moscow";
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            String citiesList = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            return new ArrayList<>(Arrays.asList(gson.fromJson(citiesList, City[].class)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (cityName == getString(R.string.citiesPetersburgLabelText)) {
-            return "https://en.wikipedia.org/wiki/Saint_Petersburg";
-        }
-        if (cityName == getString(R.string.citiesVolgogradLabelText)) {
-            return "https://en.wikipedia.org/wiki/Volgograd";
-        }
-        if (cityName == getString(R.string.citiesKazanLabelText)) {
-            return "https://en.wikipedia.org/wiki/Kazan";
-        }
-        return "https://www.merriam-webster.com/dictionary/in%20the%20middle%20of%20nowhere";
+        return null;
     }
 }

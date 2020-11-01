@@ -5,11 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
+import com.degrizz.james.android_gkb.WeatherOracle.Helpers.WeatherHelper;
+import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
+import com.degrizz.james.android_gkb.WeatherOracle.Models.WeatherRequest;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity implements Constants {
 
@@ -25,28 +40,17 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
         if (requestCode == citiesActivityRequest && resultCode == citiesActivityResult) {
 
-            String newName = data.getStringExtra(updatedCityName);
-            if (newName != null) {
-                TextView cityView = findViewById(R.id.textViewChosenCity);
-                cityView.setText(newName);
+            City city = (City) data.getSerializableExtra(updatedCity);
+            if (city == null) {
+                return;
             }
 
-            int newTemperature = data.getIntExtra(updatedTemperatureName, 1000);
-            if (newTemperature != 1000) {
-                TextView temperatureView = findViewById(R.id.textViewTemperature);
-                temperatureView.setText(Integer.toString(newTemperature));
-            }
+            TextView cityView = findViewById(R.id.textViewChosenCity);
+            cityView.setText(city.getCountry() + ", " + city.getName());
 
-            String newInfoLink = data.getStringExtra(updatedInfoLinkName);
-            if (newInfoLink != null) {
-                TextView infoLinkView = findViewById(R.id.textViewInfo);
-                infoLinkView.setText(R.string.infoTextViewClickMeText);
-                infoLinkView.setOnClickListener((View v) -> {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(newInfoLink));
-                    startActivity(i);
-                });
-            }
+            WeatherHelper.getTemperatureInfo(city.getId(), this);
         }
     }
+
+
 }

@@ -40,18 +40,11 @@ import java.util.stream.Collectors;
 import javax.net.ssl.HttpsURLConnection;
 
 public class FragmentMain extends Fragment implements Constants {
-
-    private static final String TAG = "FragmentMain";
-    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?lat=55.75&lon=37.62&appid=";
-    private final float KELVINS = 273.15f;
-
     public FragmentMain() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        gmph();
     }
 
     @Override
@@ -66,8 +59,6 @@ public class FragmentMain extends Fragment implements Constants {
         String[] hours = getResources().getStringArray(R.array.daily_hours);
         String[] dailyTemps = getResources().getStringArray(R.array.daily_temperature);
         initDailyView(view, hours, dailyTemps);
-
-        loadCitiesList(view);
 
         return view;
     }
@@ -128,61 +119,5 @@ public class FragmentMain extends Fragment implements Constants {
 
         DayTempAdapter adapter = new DayTempAdapter(hours, temperatures);
         dailyView.setAdapter(adapter);
-    }
-
-    private void gmph() {
-        try {
-            final URL uri = new URL(WEATHER_URL + BuildConfig.WEATHER_API_KEY);
-            final Handler handler = new Handler();
-            new Thread(() -> {
-                HttpsURLConnection urlConnection = null;
-                try {
-                    urlConnection = (HttpsURLConnection) uri.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.setReadTimeout(10000);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    String result = getLines(in);
-                    Gson gson = new Gson();
-                    final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
-                    handler.post(() -> {
-                        float f = weatherRequest.getMain().getTemp();
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG, "Fail connection", e);
-                    e.printStackTrace();
-                } finally {
-                    if (null != urlConnection) {
-                        urlConnection.disconnect();
-                    }
-                }
-            }).start();
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "Fail URI", e);
-            e.printStackTrace();
-        }
-    }
-
-    private void loadCitiesList(View view) {
-        try {
-            InputStream is = view.getContext().getAssets().open("city.list.json");
-
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            String citiesList = new String(buffer, "UTF-8");
-            Gson gson = new Gson();
-            final City[] cities = gson.fromJson(citiesList, City[].class);
-            int b = 2;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getLines(BufferedReader in) {
-        return in.lines().collect(Collectors.joining("\n"));
     }
 }
