@@ -24,6 +24,10 @@
     <string name="snackbar_about_test">About</string>
     <string name="cityFilter">filter</string>
 
+    <string name="alert_dialog_message">Can\'t load weather</string>
+    <string name="alert_dialog_title">Warning</string>
+    <string name="alert_dialog_positive_button_text">Continue</string>
+
     <string-array name="weekly_days">
         <item>22 october</item>
         <item>23 october</item>

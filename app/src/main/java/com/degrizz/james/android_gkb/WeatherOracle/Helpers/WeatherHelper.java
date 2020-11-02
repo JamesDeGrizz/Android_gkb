@@ -1,9 +1,11 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Helpers;
 
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
@@ -55,7 +57,14 @@ public class WeatherHelper {
             }).start();
         } catch (MalformedURLException e) {
             Log.e(TAG, "Fail URI", e);
-            e.printStackTrace();
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage(R.string.alert_dialog_message)
+                    .setTitle(R.string.alert_dialog_title)
+                    .setPositiveButton(R.string.alert_dialog_positive_button_text, (dialog, id1) -> {
+                        dialog.cancel();
+                    }) ;
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 
