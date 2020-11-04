@@ -2,36 +2,35 @@ package com.degrizz.james.android_gkb.WeatherOracle.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
-import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
 import com.degrizz.james.android_gkb.WeatherOracle.Helpers.WeatherHelper;
 import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
-import com.degrizz.james.android_gkb.WeatherOracle.Models.WeatherRequest;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
-import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.stream.Collectors;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements Constants {
+    private boolean firstTime = true;
+    private final String historyKey = "history";
+    private final String lastCityValueKey = "last_city_value";
+    private final String lastTemperatureValueKey = "last_temperature_value";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (firstTime) {
+            loadLastRecordFromHistory();
+            firstTime = false;
+        }
     }
 
     @Override
@@ -52,5 +51,32 @@ public class MainActivity extends AppCompatActivity implements Constants {
         }
     }
 
+    public void updateHistory(String cityName, float temperatureValue) {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        Set<String> history = sharedPref.getStringSet(historyKey, new LinkedHashSet<>());
+        history.add(cityName + "__" + temperatureValue);
+        if (history.size() > 20) {
+            for (Iterator<String> it = history.iterator(); it.hasNext() && history.size() > 20;) {
+                it.next();
+                it.remove();
+            }
+        }
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(historyKey, history);
+        editor.putString(lastCityValueKey, cityName);
+        editor.putFloat(lastTemperatureValueKey, temperatureValue);
+        editor.apply();
+    }
 
+    void loadLastRecordFromHistory() {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String lastCity = sharedPref.getString(lastCityValueKey, "Unknown");
+        float lastTemperature = sharedPref.getFloat(lastTemperatureValueKey, -1000.0f);
+
+        TextView temperatureView = findViewById(R.id.textViewTemperature);
+        temperatureView.setText(lastTemperature == -1000.0f ? "Unknown" : String.format("%.2f", lastTemperature));
+
+        TextView cityTextView = findViewById(R.id.textViewChosenCity);
+        cityTextView.setText(lastCity);
+    }
 }
