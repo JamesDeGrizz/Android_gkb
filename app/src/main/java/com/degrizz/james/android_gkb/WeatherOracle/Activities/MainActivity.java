@@ -1,6 +1,9 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Activities;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +15,7 @@ import com.degrizz.james.android_gkb.WeatherOracle.Constants;
 import com.degrizz.james.android_gkb.WeatherOracle.Helpers.WeatherHelper;
 import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -26,7 +30,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_drawer);
+        Toolbar tb = initToolbar();
+        initDrawer(tb);
         if (firstTime) {
             loadLastRecordFromHistory();
             firstTime = false;
@@ -78,5 +84,21 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
         TextView cityTextView = findViewById(R.id.textViewChosenCity);
         cityTextView.setText(lastCity);
+    }
+
+    private Toolbar initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        return toolbar;
+    }
+
+    private void initDrawer(Toolbar toolbar) {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+//        navigationView.setNavigationItemSelectedListener(this);
     }
 }
