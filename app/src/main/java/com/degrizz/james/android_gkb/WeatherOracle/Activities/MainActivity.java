@@ -135,7 +135,11 @@ public class MainActivity extends AppCompatActivity implements Constants {
     }
 
     public void setHistoryFragment() {
-        FragmentHistory fragment = new FragmentHistory();
+        FragmentHistory fragment = (FragmentHistory) getSupportFragmentManager().findFragmentById(R.id.fragment_history);
+        if (fragment == null) {
+            fragment = new FragmentHistory();
+        }
+        
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
             getSupportFragmentManager().popBackStack();
         }
@@ -147,7 +151,11 @@ public class MainActivity extends AppCompatActivity implements Constants {
     }
 
     public void setMainFragment() {
-        FragmentMain fragment = new FragmentMain();
+        FragmentMain fragment = (FragmentMain) getSupportFragmentManager().findFragmentById(R.id.fragment_main);
+        if (fragment == null) {
+            fragment = new FragmentMain();
+        }
+
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
             getSupportFragmentManager().popBackStack();
         }
