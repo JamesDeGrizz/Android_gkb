@@ -33,6 +33,7 @@
     <string name="history">history</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
+    <string name="nav_main">main</string>
 
     <string-array name="weekly_days">
         <item>22 october</item>

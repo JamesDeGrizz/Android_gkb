@@ -1,6 +1,5 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Helpers;
 
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;

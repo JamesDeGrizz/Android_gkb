@@ -10,6 +10,7 @@
     tools:context=".Activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <!--
     <fragment android:name="com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain"
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -18,5 +19,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

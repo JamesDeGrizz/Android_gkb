@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
@@ -30,7 +28,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements Constants {
-    private boolean firstTime = true;
     private final String historyKey = "history";
     private final String lastCityValueKey = "last_city_value";
     private final String lastTemperatureValueKey = "last_temperature_value";
@@ -39,12 +36,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawer);
+        setMainFragment();
         Toolbar tb = initToolbar();
         initDrawer(tb);
-        if (firstTime) {
-            loadLastRecordFromHistory();
-            firstTime = false;
-        }
     }
 
     @Override
@@ -82,16 +76,15 @@ public class MainActivity extends AppCompatActivity implements Constants {
         editor.apply();
     }
 
-    void loadLastRecordFromHistory() {
+    public String getLastTemperature() {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String lastCity = sharedPref.getString(lastCityValueKey, "Unknown");
+        return sharedPref.getString(lastCityValueKey, "Unknown");
+    }
+
+    public String getLastCity() {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         float lastTemperature = sharedPref.getFloat(lastTemperatureValueKey, -1000.0f);
-
-        TextView temperatureView = findViewById(R.id.textViewTemperature);
-        temperatureView.setText(lastTemperature == -1000.0f ? "Unknown" : String.format("%.2f", lastTemperature));
-
-        TextView cityTextView = findViewById(R.id.textViewChosenCity);
-        cityTextView.setText(lastCity);
+        return lastTemperature == -1000.0 ? "Unknown" : String.format("%.2f", lastTemperature);
     }
 
     public Set<String> getHistory() {
@@ -108,8 +101,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private void initDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -118,7 +110,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
 
-                if (id == R.id.nav_location) {
+                if (id == R.id.nav_main) {
+                    setMainFragment();
+                } else if (id == R.id.nav_location) {
                     Intent intent = new Intent();
                     intent.setClass(getBaseContext(), MainActivityCities.class);
                     startActivityForResult(intent, citiesActivityRequest);
@@ -135,34 +129,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
     }
 
     public void setHistoryFragment() {
-        FragmentHistory fragment = (FragmentHistory) getSupportFragmentManager().findFragmentById(R.id.fragment_history);
-        if (fragment == null) {
-            fragment = new FragmentHistory();
-        }
-        
-        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
-            getSupportFragmentManager().popBackStack();
-        }
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_main_layout, fragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.fragment_main_layout, new FragmentHistory());
         fragmentTransaction.commit();
     }
 
     public void setMainFragment() {
-        FragmentMain fragment = (FragmentMain) getSupportFragmentManager().findFragmentById(R.id.fragment_main);
-        if (fragment == null) {
-            fragment = new FragmentMain();
-        }
-
-        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
-            getSupportFragmentManager().popBackStack();
-        }
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_main_layout, fragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.fragment_main_layout, new FragmentMain());
         fragmentTransaction.commit();
     }
 }
