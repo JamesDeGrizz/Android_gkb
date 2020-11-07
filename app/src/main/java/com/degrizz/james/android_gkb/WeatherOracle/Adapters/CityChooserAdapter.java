@@ -1,18 +1,18 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Adapters;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
+import com.degrizz.james.android_gkb.WeatherOracle.Helpers.WeatherHelper;
 import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.subinkrishna.widget.CircularImageView;
 
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ import java.util.ArrayList;
 public class CityChooserAdapter extends RecyclerView.Adapter<CityChooserAdapter.ViewHolder> implements Constants {
     private ArrayList<City> cities;
     private ArrayList<City> citiesFiltered;
-    private Fragment parent;
+    private BottomSheetDialogFragment parent;
 
-    public CityChooserAdapter(ArrayList<City> cities, Fragment parent) {
+    public CityChooserAdapter(ArrayList<City> cities, BottomSheetDialogFragment parent) {
         this.cities = cities;
         citiesFiltered = new ArrayList<>(this.cities);
         this.parent = parent;
@@ -42,10 +42,8 @@ public class CityChooserAdapter extends RecyclerView.Adapter<CityChooserAdapter.
         int id = citiesFiltered.get(position).getId();
         holder.setTextToTextView(country, city, id);
         holder.city.setOnClickListener(v -> {
-            Intent result = new Intent();
-            result.putExtra(updatedCity, citiesFiltered.get(position));
-            parent.getActivity().setResult(citiesActivityResult, result);
-            parent.getActivity().finish();
+            City chosenCity = citiesFiltered.get(position);
+            WeatherHelper.getTemperatureInfo(chosenCity.getName(), chosenCity.getCountry(), chosenCity.getId(), parent);
         });
     }
 
@@ -65,10 +63,6 @@ public class CityChooserAdapter extends RecyclerView.Adapter<CityChooserAdapter.
                 citiesFiltered.add(city);
             }
         }
-    }
-
-    public ArrayList<City> getCities() {
-        return cities;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

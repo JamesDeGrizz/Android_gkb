@@ -1,18 +1,14 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +18,7 @@ import com.degrizz.james.android_gkb.WeatherOracle.Adapters.CityChooserAdapter;
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
 import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
@@ -31,9 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FragmentCities extends Fragment implements Constants {
-    private String logTag = "FragmentCities";
-
+public class FragmentCities extends BottomSheetDialogFragment implements Constants {
     public FragmentCities() {}
 
     @Override
@@ -56,13 +51,9 @@ public class FragmentCities extends Fragment implements Constants {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Intent intent = new Intent();
-
         Button citiesCloseBtn = view.findViewById(R.id.buttonCitiesClose);
         citiesCloseBtn.setOnClickListener((View v) -> {
-            Log.d(logTag, "MainActivityCities citiesCloseBtn clicked");
-            getActivity().setResult(Activity.RESULT_CANCELED, intent);
-            getActivity().finish();
+            dismiss();
         });
 
         final TextInputLayout cityFilterLayout = (TextInputLayout) view.findViewById(R.id.cityFilterLayout);
