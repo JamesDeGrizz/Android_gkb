@@ -15,6 +15,13 @@
     <string name="citiesVolgogradLabelText">Volgograd</string>
     <string name="citiesKazanLabelText">Kazan</string>
     <string name="citiesButtonCloseText">Close</string>
+    <string name="bottom_menu_location">location</string>
+    <string name="bottom_menu_layout">about</string>
+
+    <string name="about_developer" translatable="false">Who: JamesDeGrizz\n Why: education\n When: october 2020\n Where: Moscow, Russia How: my-email@gmail.com</string>
+    <string name="snackbar_non_clickable">Non-clickable</string>
+    <string name="snackbar_location_warning">Choose location first</string>
+    <string name="snackbar_about_test">About</string>
 
     <string-array name="weekly_days">
         <item>22 october</item>

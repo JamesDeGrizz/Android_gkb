@@ -1,10 +1,12 @@
 package com.degrizz.james.android_gkb.helloworld;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class FragmentMain extends Fragment implements Constants {
 
@@ -43,11 +47,36 @@ public class FragmentMain extends Fragment implements Constants {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView chosenCity = view.findViewById(R.id.textViewChosenCity);
-        chosenCity.setOnClickListener((View v) -> {
+        TextView city = view.findViewById(R.id.textViewChosenCity);
+        city.setOnClickListener((View v) -> {
+            Snackbar.make(view, R.string.snackbar_non_clickable, Snackbar.LENGTH_LONG).show();
+        });
+
+        TextView temperature = view.findViewById(R.id.textViewTemperature);
+        temperature.setOnClickListener((View v) -> {
+            Snackbar.make(view, R.string.snackbar_non_clickable, Snackbar.LENGTH_LONG).show();
+        });
+
+        TextView info = view.findViewById(R.id.textViewInfo);
+        info.setOnClickListener((View v) -> {
+            Snackbar.make(view, R.string.snackbar_location_warning, Snackbar.LENGTH_LONG).show();
+        });
+
+        View location = view.findViewById(R.id.choose_location);
+        location.setOnClickListener((View v) -> {
             Intent intent = new Intent();
             intent.setClass(getActivity(), MainActivityCities.class);
             getActivity().startActivityForResult(intent, citiesActivityRequest);
+        });
+
+        View about = view.findViewById(R.id.show_about);
+        about.setOnClickListener((View v) -> {
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle(R.string.snackbar_about_test)
+                    .setMessage((R.string.about_developer))
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .show();
         });
     }
 
