@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    android:radius="10.0dip"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp">
+
+    <com.subinkrishna.widget.CircularImageView
+        android:id="@+id/countryName"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:layout_gravity="left"
+        app:ci_borderWidth="2dp"
+        app:ci_borderColor="@android:color/holo_purple"
+        app:ci_placeholderBackgroundColor="@android:color/black"
+        app:ci_placeholderText="STUB"
+        app:ci_placeholderTextSize="22sp"
+        app:ci_placeholderTextColor="@android:color/white"
+        app:ci_shadowRadius="5.0"
+        app:ci_shadowColor="#999999" />
+
+    <TextView
+        android:id="@+id/cityName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:lines="1"
+        android:ellipsize="end"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="left|center_vertical"
+        />
+
+</LinearLayout>

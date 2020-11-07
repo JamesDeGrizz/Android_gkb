@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="100"
-    tools:context=".MainActivityCities">
+    tools:context=".Activities.MainActivityCities">
 
-    <fragment android:name="com.degrizz.james.android_gkb.helloworld.FragmentCities"
+    <fragment android:name="com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentCities"
         android:id="@+id/cities"
         android:layout_weight="1"
         android:layout_width="match_parent"

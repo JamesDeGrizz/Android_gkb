@@ -6,12 +6,19 @@ android {
 
     defaultConfig {
         applicationId "com.degrizz.james.android_gkb.helloworld"
-        minSdkVersion 23
+        minSdkVersion 27
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def weatherApiKey  = properties.getProperty("weather_api_key", "")
+        it.buildConfigField "String", "WEATHER_API_KEY", weatherApiKey
     }
 
     buildTypes {
@@ -38,4 +45,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    // JSON
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    // Circle image
+    compile 'com.subinkrishna:circularimageview:1.2.2'
 }
