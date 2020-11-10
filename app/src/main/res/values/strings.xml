@@ -27,6 +27,13 @@
     <string name="alert_dialog_message">Can\'t load weather</string>
     <string name="alert_dialog_title">Warning</string>
     <string name="alert_dialog_positive_button_text">Continue</string>
+    <string name="menu_location">location</string>
+    <string name="author">JamesDeGrizz</string>
+    <string name="author_email">JamesDeGrizz@gmail.com</string>
+    <string name="history">history</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="nav_main">main</string>
 
     <string-array name="weekly_days">
         <item>22 october</item>

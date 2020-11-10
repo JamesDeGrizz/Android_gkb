@@ -1,6 +1,5 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Helpers;
 
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
@@ -8,6 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity;
 import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
 import com.degrizz.james.android_gkb.WeatherOracle.Models.WeatherRequest;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
@@ -45,6 +45,10 @@ public class WeatherHelper {
                         float temp = weatherRequest.getMain().getTemp() - KELVINS;
                         TextView temperatureView = activity.findViewById(R.id.textViewTemperature);
                         temperatureView.setText(String.format("%.2f", temp));
+
+                        MainActivity mActivity = (MainActivity)activity;
+                        TextView cityTextView = activity.findViewById(R.id.textViewChosenCity);
+                        mActivity.updateHistory(cityTextView.getText().toString(), temp);
                     });
                 } catch (Exception e) {
                     Log.e(TAG, "Fail connection", e);

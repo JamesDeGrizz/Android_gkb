@@ -22,4 +22,12 @@
     <string name="citiesVolgogradLabelText">Волгоград</string>
     <string name="citiesKazanLabelText">Казань</string>
     <string name="citiesButtonCloseText">Закрыть</string>
+
+    <string name="menu_location">Местоположение</string>
+    <string name="author">JamesDeGrizz</string>
+    <string name="author_email">JamesDeGrizz@gmail.com</string>
+    <string name="history">История запросов</string>
+    <string name="navigation_drawer_open">Открыть</string>
+    <string name="navigation_drawer_close">Закрыть</string>
+    <string name="nav_main">главная</string>
 </resources>

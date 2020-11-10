@@ -10,34 +10,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity;
 import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivityCities;
 import com.degrizz.james.android_gkb.WeatherOracle.Adapters.DayTempAdapter;
 import com.degrizz.james.android_gkb.WeatherOracle.Adapters.WeeklyTempAdapter;
-import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
-import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
-import com.degrizz.james.android_gkb.WeatherOracle.Models.WeatherRequest;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.stream.Collectors;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class FragmentMain extends Fragment implements Constants {
     public FragmentMain() {}
@@ -98,6 +82,8 @@ public class FragmentMain extends Fragment implements Constants {
                     .setIcon(android.R.drawable.ic_dialog_info)
                     .show();
         });
+
+        setLastCityAndTempValues();
     }
 
     private void initWeeklyView(View view, String[] days, String[] temperatures) {
@@ -119,5 +105,15 @@ public class FragmentMain extends Fragment implements Constants {
 
         DayTempAdapter adapter = new DayTempAdapter(hours, temperatures);
         dailyView.setAdapter(adapter);
+    }
+
+    void setLastCityAndTempValues() {
+        MainActivity act = (MainActivity) getActivity();
+
+        TextView temperatureView = act.findViewById(R.id.textViewTemperature);
+        temperatureView.setText(act.getLastTemperature());
+
+        TextView cityTextView = act.findViewById(R.id.textViewChosenCity);
+        cityTextView.setText(act.getLastCity());
     }
 }
