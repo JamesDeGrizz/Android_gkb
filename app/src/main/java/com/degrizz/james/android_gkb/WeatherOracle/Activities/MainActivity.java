@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
+import com.degrizz.james.android_gkb.WeatherOracle.CrystalBallView;
+import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentCities;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentHistory;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain;
 import com.degrizz.james.android_gkb.WeatherOracle.Helpers.WeatherHelper;
@@ -41,25 +43,17 @@ public class MainActivity extends AppCompatActivity implements Constants {
         initDrawer(tb);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void update(String cityName, String country, float temperatureValue) {
+        TextView cityView = findViewById(R.id.textViewChosenCity);
+        cityView.setText(cityName + ", " + country);
 
-        if (requestCode == citiesActivityRequest && resultCode == citiesActivityResult) {
+        CrystalBallView temperature = findViewById(R.id.temperatureView);
+        temperature.setText(String.format("%.2f", temperatureValue));
 
-            City city = (City) data.getSerializableExtra(updatedCity);
-            if (city == null) {
-                return;
-            }
-
-            TextView cityView = findViewById(R.id.textViewChosenCity);
-            cityView.setText(city.getCountry() + ", " + city.getName());
-
-            WeatherHelper.getTemperatureInfo(city.getId(), this);
-        }
+        updateHistory(cityName + ", " + country, temperatureValue);
     }
 
-    public void updateHistory(String cityName, float temperatureValue) {
+    private void updateHistory(String cityName, float temperatureValue) {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         Set<String> history = sharedPref.getStringSet(historyKey, new LinkedHashSet<>());
         history.add(cityName + "__" + temperatureValue);
@@ -76,12 +70,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
         editor.apply();
     }
 
-    public String getLastTemperature() {
+    public String getLastCity() {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         return sharedPref.getString(lastCityValueKey, "Unknown");
     }
 
-    public String getLastCity() {
+    public String getLastTemperature() {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         float lastTemperature = sharedPref.getFloat(lastTemperatureValueKey, -1000.0f);
         return lastTemperature == -1000.0 ? "Unknown" : String.format("%.2f", lastTemperature);
@@ -113,9 +107,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 if (id == R.id.nav_main) {
                     setMainFragment();
                 } else if (id == R.id.nav_location) {
-                    Intent intent = new Intent();
-                    intent.setClass(getBaseContext(), MainActivityCities.class);
-                    startActivityForResult(intent, citiesActivityRequest);
+                    FragmentCities fr = new FragmentCities();
+                    fr.show(getSupportFragmentManager(), getResources().getString(R.string.bottom_menu_location));
                 } else if (id == R.id.nav_history) {
                     setHistoryFragment();
                 }

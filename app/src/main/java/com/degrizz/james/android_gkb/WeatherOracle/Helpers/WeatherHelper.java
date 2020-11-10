@@ -2,15 +2,14 @@ package com.degrizz.james.android_gkb.WeatherOracle.Helpers;
 
 import android.os.Handler;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity;
 import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
 import com.degrizz.james.android_gkb.WeatherOracle.Models.WeatherRequest;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -26,7 +25,7 @@ public class WeatherHelper {
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?id=%d&appid=";
     private final static float KELVINS = 273.15f;
     
-    public static void getTemperatureInfo(int id, AppCompatActivity activity) {
+    public static void getTemperatureInfo(String city, String country, int id, BottomSheetDialogFragment parent) {
         try {
             String url = String.format(WEATHER_URL, id);
             final URL uri = new URL(url + BuildConfig.WEATHER_API_KEY);
@@ -43,12 +42,11 @@ public class WeatherHelper {
                     final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
                     handler.post(() -> {
                         float temp = weatherRequest.getMain().getTemp() - KELVINS;
-                        TextView temperatureView = activity.findViewById(R.id.textViewTemperature);
-                        temperatureView.setText(String.format("%.2f", temp));
 
-                        MainActivity mActivity = (MainActivity)activity;
-                        TextView cityTextView = activity.findViewById(R.id.textViewChosenCity);
-                        mActivity.updateHistory(cityTextView.getText().toString(), temp);
+                        MainActivity mActivity = (MainActivity) parent.getActivity();
+                        mActivity.update(city, country, temp);
+
+                        parent.dismiss();
                     });
                 } catch (Exception e) {
                     Log.e(TAG, "Fail connection", e);
@@ -61,7 +59,7 @@ public class WeatherHelper {
             }).start();
         } catch (MalformedURLException e) {
             Log.e(TAG, "Fail URI", e);
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            AlertDialog.Builder builder = new AlertDialog.Builder(parent.getActivity());
             builder.setMessage(R.string.alert_dialog_message)
                     .setTitle(R.string.alert_dialog_title)
                     .setPositiveButton(R.string.alert_dialog_positive_button_text, (dialog, id1) -> {

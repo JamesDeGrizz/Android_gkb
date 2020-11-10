@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         >
-        <activity android:name="com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivityCities"></activity>
         <activity android:name="com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

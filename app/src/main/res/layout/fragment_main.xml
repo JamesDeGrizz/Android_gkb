@@ -8,83 +8,40 @@
     android:orientation="vertical"
     android:id="@+id/fragment_main">
 
+    <com.degrizz.james.android_gkb.WeatherOracle.CrystalBallView
+        android:id="@+id/temperatureView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        app:stroke_width="4"
+        app:text_size="60"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
         <!-- Location -->
+
         <ImageView
-            android:id="@+id/imageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="top|left"
-            android:src="@drawable/location" />
+            android:src="@drawable/location"
+            />
 
         <TextView
             android:id="@+id/textViewChosenCity"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:textAlignment="viewStart"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:text="@string/citiesTextViewUnknownText"
             android:textSize="28sp" />
+
     </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-    <!-- Temperature -->
-    <ImageView
-        android:id="@+id/imageViewTemperature"
-        android:layout_marginLeft="10dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="top|left"
-        android:src="@drawable/temperature" />
-
-    <TextView
-        android:id="@+id/textViewTemperature"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textAlignment="viewStart"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="10dp"
-        android:text="@string/temperatureTextViewUnknownText"
-        android:textSize="28sp" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        >
-    <!-- Info -->
-    <ImageView
-        android:id="@+id/imageViewInfo"
-        android:layout_marginLeft="10dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="top|left"
-        android:src="@drawable/info" />
-
-    <TextView
-        android:id="@+id/textViewInfo"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="10dp"
-        android:textAlignment="viewStart"
-        android:text="@string/infoTextViewUnknownText"
-        android:textSize="28sp" />
-    </LinearLayout>
-
 
     <TextView
         android:layout_width="match_parent"
@@ -102,7 +59,7 @@
         android:id="@+id/dayTempView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="10"
+        android:layout_weight="12"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
