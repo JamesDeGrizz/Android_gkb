@@ -1,6 +1,5 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Helpers;
 
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
@@ -29,7 +28,6 @@ public class WeatherHelper {
         try {
             String url = String.format(WEATHER_URL, id);
             final URL uri = new URL(url + BuildConfig.WEATHER_API_KEY);
-            final Handler handler = new Handler();
             new Thread(() -> {
                 HttpsURLConnection urlConnection = null;
                 try {
@@ -39,13 +37,12 @@ public class WeatherHelper {
                     BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     String result = getLines(in);
                     Gson gson = new Gson();
+
+                    MainActivity mActivity = (MainActivity) parent.getActivity();
                     final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
-                    handler.post(() -> {
+                    mActivity.runOnUiThread(() -> {
                         float temp = weatherRequest.getMain().getTemp() - KELVINS;
-
-                        MainActivity mActivity = (MainActivity) parent.getActivity();
                         mActivity.update(city, country, temp);
-
                         parent.dismiss();
                     });
                 } catch (Exception e) {
