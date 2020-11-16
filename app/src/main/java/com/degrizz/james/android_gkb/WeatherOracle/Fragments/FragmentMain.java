@@ -1,5 +1,8 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity;
@@ -21,6 +26,8 @@ import com.degrizz.james.android_gkb.WeatherOracle.Constants;
 import com.degrizz.james.android_gkb.WeatherOracle.CrystalBallView;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public class FragmentMain extends Fragment implements Constants {
     public FragmentMain() {}
@@ -55,11 +62,16 @@ public class FragmentMain extends Fragment implements Constants {
             Snackbar.make(view, R.string.snackbar_non_clickable, Snackbar.LENGTH_LONG).show();
         });
 
-        View location = view.findViewById(R.id.choose_location);
-        location.setOnClickListener((View v) -> {
+        View locationMenuButton = view.findViewById(R.id.choose_location);
+        locationMenuButton.setOnClickListener((View v) -> {
             FragmentCities fr = new FragmentCities();
             fr.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.bottom_menu_location));
         });
+
+        ImageView locationImage = view.findViewById(R.id.imageChosenCityLocation);
+        Picasso.get()
+                .load(R.drawable.location)
+                .into(locationImage);
 
         View about = view.findViewById(R.id.show_about);
         about.setOnClickListener((View v) -> {
@@ -98,8 +110,9 @@ public class FragmentMain extends Fragment implements Constants {
     void setLastCityAndTempValues() {
         MainActivity act = (MainActivity) getActivity();
 
-        CrystalBallView temperature = act.findViewById(R.id.temperatureView);
-        temperature.setText(act.getLastTemperature());
+        CrystalBallView temperatureView = act.findViewById(R.id.temperatureView);
+        String temperature = act.getLastTemperature();
+        temperatureView.setText(temperature);
 
         TextView cityTextView = act.findViewById(R.id.textViewChosenCity);
         cityTextView.setText(act.getLastCity());
