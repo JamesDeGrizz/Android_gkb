@@ -7,8 +7,7 @@ import androidx.room.TypeConverters;
 import com.degrizz.james.android_gkb.WeatherOracle.Database.Dao.HistoryDao;
 import com.degrizz.james.android_gkb.WeatherOracle.Database.Model.HistoryRecord;
 
-@Database(entities = {HistoryRecord.class})
-@TypeConverters()
+@Database(entities = {HistoryRecord.class}, version = 1)
 public abstract class HistoryDatabase extends RoomDatabase {
     public abstract HistoryDao getHistoryDao();
 }

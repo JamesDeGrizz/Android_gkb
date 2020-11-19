@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
 import com.degrizz.james.android_gkb.WeatherOracle.CrystalBallView;
+import com.degrizz.james.android_gkb.WeatherOracle.Database.HistoryDatabase;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentCities;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentHistory;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private final String lastCityValueKey = "last_city_value";
     private final String lastTemperatureValueKey = "last_temperature_value";
     public static final String WEATHER_UPDATED = "weather_updated";
+    private HistoryDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         setMainFragment();
         Toolbar tb = initToolbar();
         initDrawer(tb);
+        initDatabase();
     }
 
     public void update(String cityName, String country, float temperatureValue) {
@@ -151,6 +155,15 @@ public class MainActivity extends AppCompatActivity implements Constants {
             }
 
         });
+    }
+
+    private void initDatabase() {
+        db = Room.databaseBuilder(
+                getApplicationContext(),
+                HistoryDatabase.class,
+                "history_database")
+                .allowMainThreadQueries()
+                .build();
     }
 
     public void setHistoryFragment() {
