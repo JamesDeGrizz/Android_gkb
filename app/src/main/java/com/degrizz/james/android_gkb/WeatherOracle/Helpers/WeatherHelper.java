@@ -1,6 +1,5 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Helpers;
 
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
@@ -10,67 +9,58 @@ import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
 import com.degrizz.james.android_gkb.WeatherOracle.Models.WeatherRequest;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.stream.Collectors;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
-import javax.net.ssl.HttpsURLConnection;
+interface OpenWeather {
+    @GET("data/2.5/weather")
+    Call<WeatherRequest> loadWeather(@Query("id") int id, @Query("appid") String keyApi);
+}
 
 public class WeatherHelper {
     private static final String TAG = "WeatherHelper";
-    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?id=%d&appid=";
     private final static float KELVINS = 273.15f;
     
     public static void getTemperatureInfo(String city, String country, int id, BottomSheetDialogFragment parent) {
-        try {
-            String url = String.format(WEATHER_URL, id);
-            final URL uri = new URL(url + BuildConfig.WEATHER_API_KEY);
-            final Handler handler = new Handler();
-            new Thread(() -> {
-                HttpsURLConnection urlConnection = null;
-                try {
-                    urlConnection = (HttpsURLConnection) uri.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.setReadTimeout(10000);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    String result = getLines(in);
-                    Gson gson = new Gson();
-                    final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
-                    handler.post(() -> {
-                        float temp = weatherRequest.getMain().getTemp() - KELVINS;
+            OpenWeather openWeather = new Retrofit.Builder()
+                    .baseUrl("https://api.openweathermap.org/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(OpenWeather.class);
 
+            openWeather.loadWeather(id, BuildConfig.WEATHER_API_KEY).enqueue(new Callback<WeatherRequest>() {
+                @Override
+                public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
+                    if (response.body() != null) {
                         MainActivity mActivity = (MainActivity) parent.getActivity();
-                        mActivity.update(city, country, temp);
-
-                        parent.dismiss();
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG, "Fail connection", e);
-                    e.printStackTrace();
-                } finally {
-                    if (null != urlConnection) {
-                        urlConnection.disconnect();
+                        mActivity.runOnUiThread(() -> {
+                            float temp = response.body().getMain().getTemp() - KELVINS;
+                            mActivity.update(city, country, temp);
+                            parent.dismiss();
+                        });
                     }
                 }
-            }).start();
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "Fail URI", e);
-            AlertDialog.Builder builder = new AlertDialog.Builder(parent.getActivity());
-            builder.setMessage(R.string.alert_dialog_message)
-                    .setTitle(R.string.alert_dialog_title)
-                    .setPositiveButton(R.string.alert_dialog_positive_button_text, (dialog, id1) -> {
-                        dialog.cancel();
-                    }) ;
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
-    }
 
-    private static String getLines(BufferedReader in) {
-        return in.lines().collect(Collectors.joining("\n"));
+                @Override
+                public void onFailure(Call<WeatherRequest> call, Throwable t) {
+                    Log.e(TAG, "Fail URI");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(parent.getActivity());
+                    builder.setMessage(R.string.alert_dialog_message)
+                            .setTitle(R.string.alert_dialog_title)
+                            .setPositiveButton(R.string.alert_dialog_positive_button_text, (dialog, id1) -> {
+                                dialog.cancel();
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    parent.dismiss();
+                }
+            });
+
     }
 }

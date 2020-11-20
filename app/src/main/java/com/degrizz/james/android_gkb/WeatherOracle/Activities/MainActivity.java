@@ -9,10 +9,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
@@ -20,10 +23,10 @@ import com.degrizz.james.android_gkb.WeatherOracle.CrystalBallView;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentCities;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentHistory;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain;
-import com.degrizz.james.android_gkb.WeatherOracle.Helpers.WeatherHelper;
-import com.degrizz.james.android_gkb.WeatherOracle.Models.City;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private final String historyKey = "history";
     private final String lastCityValueKey = "last_city_value";
     private final String lastTemperatureValueKey = "last_temperature_value";
+    public static final String WEATHER_UPDATED = "weather_updated";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,34 @@ public class MainActivity extends AppCompatActivity implements Constants {
         temperature.setText(String.format("%.2f", temperatureValue));
 
         updateHistory(cityName + ", " + country, temperatureValue);
+
+        LinearLayout layout = findViewById(R.id.fragment_main);
+        String uri;
+        if (temperatureValue < 0) {
+            uri = "https://unsplash.com/photos/w8hWTFpGtpY/download?force=true";
+        } else if (temperatureValue < 10) {
+            uri = "https://unsplash.com/photos/LtWFFVi1RXQ/download?force=true";
+        } else {
+            uri = "https://unsplash.com/photos/9jBs7zSbZ1s/download?force=true";
+        }
+        Picasso.get()
+                .load(uri)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        layout.setBackground(new BitmapDrawable(bitmap));
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        cityView.setText("Failed");
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
     }
 
     private void updateHistory(String cityName, float temperatureValue) {
