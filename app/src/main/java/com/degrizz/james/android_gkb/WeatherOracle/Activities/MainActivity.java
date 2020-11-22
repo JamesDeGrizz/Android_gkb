@@ -9,11 +9,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
@@ -29,7 +32,11 @@ import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentCities;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentHistory;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -49,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
         Toolbar tb = initToolbar();
         initDrawer(tb);
         initDatabase();
+        initFirebaseToken();
+        initNotificationChannel();
     }
 
     public void update(String cityName, String country, float temperatureValue) {
@@ -160,6 +169,27 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 .build();
 
         historySource = new HistorySource(db.getHistoryDao());
+    }
+
+    private void initFirebaseToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+
+                    String token = task.getResult().getToken();
+                });
+
+    }
+
+    private void initNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("2", "name", importance);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     public void setHistoryFragment() {
