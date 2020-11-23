@@ -15,14 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity;
 import com.degrizz.james.android_gkb.WeatherOracle.Adapters.HistoryAdapter;
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
+import com.degrizz.james.android_gkb.WeatherOracle.Database.HistorySource;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
 
-import java.util.Set;
-
 public class FragmentHistory extends Fragment implements Constants {
-    private static final String TAG = "FragmentHistory";
+    private HistorySource historySource;
 
-    public FragmentHistory() {}
+    public FragmentHistory(HistorySource historySource) {
+        this.historySource = historySource;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,18 +36,17 @@ public class FragmentHistory extends Fragment implements Constants {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        Set<String> history = loadHistoryList();
-        initHistoryView(view, history);
+        initHistoryView(view);
         return view;
     }
 
-    private void initHistoryView(View view, Set<String> history) {
+    private void initHistoryView(View view) {
         RecyclerView historyView = view.findViewById(R.id.historyView);
         historyView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         historyView.setLayoutManager(layoutManager);
 
-        HistoryAdapter adapter = new HistoryAdapter(history);
+        HistoryAdapter adapter = new HistoryAdapter(historySource);
         historyView.setAdapter(adapter);
     }
 
@@ -59,10 +59,5 @@ public class FragmentHistory extends Fragment implements Constants {
             MainActivity act = (MainActivity) getActivity();
             act.setMainFragment();
         });
-    }
-
-    private Set<String> loadHistoryList() {
-        MainActivity act = (MainActivity) getActivity();
-        return act.getHistory();
     }
 }

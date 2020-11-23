@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,12 +15,16 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Constants;
 import com.degrizz.james.android_gkb.WeatherOracle.CrystalBallView;
+import com.degrizz.james.android_gkb.WeatherOracle.Database.HistoryDatabase;
+import com.degrizz.james.android_gkb.WeatherOracle.Database.HistorySource;
+import com.degrizz.james.android_gkb.WeatherOracle.Database.Model.HistoryRecord;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentCities;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentHistory;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain;
@@ -28,15 +33,13 @@ import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements Constants {
-    private final String historyKey = "history";
     private final String lastCityValueKey = "last_city_value";
     private final String lastTemperatureValueKey = "last_temperature_value";
-    public static final String WEATHER_UPDATED = "weather_updated";
+    private HistoryDatabase db;
+    private HistorySource historySource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         setMainFragment();
         Toolbar tb = initToolbar();
         initDrawer(tb);
+        initDatabase();
     }
 
     public void update(String cityName, String country, float temperatureValue) {
@@ -55,7 +59,27 @@ public class MainActivity extends AppCompatActivity implements Constants {
         temperature.setText(String.format("%.2f", temperatureValue));
 
         updateHistory(cityName + ", " + country, temperatureValue);
+        updateLastResult(cityName + ", " + country, temperatureValue);
+        updateBackground(temperatureValue);
+    }
 
+    private void updateHistory(String cityName, float temperatureValue) {
+        HistoryRecord rd = new HistoryRecord();
+        rd.location = cityName;
+        rd.temperature = String.format("%.0f", temperatureValue);
+        rd.date = DateFormat.format("dd.MM.yyyy", new java.util.Date()).toString();
+        historySource.addHistoryRecord(rd);
+    }
+
+    private void updateLastResult(String cityName, float temperatureValue) {
+        getPreferences(Context.MODE_PRIVATE)
+                .edit()
+                .putString(lastCityValueKey, cityName)
+                .putFloat(lastTemperatureValueKey, temperatureValue)
+                .apply();
+    }
+
+    private void updateBackground(float temperatureValue) {
         LinearLayout layout = findViewById(R.id.fragment_main);
         String uri;
         if (temperatureValue < 0) {
@@ -74,32 +98,11 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     }
 
                     @Override
-                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                        cityView.setText("Failed");
-                    }
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {}
 
                     @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {}
                 });
-    }
-
-    private void updateHistory(String cityName, float temperatureValue) {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        Set<String> history = sharedPref.getStringSet(historyKey, new LinkedHashSet<>());
-        history.add(cityName + "__" + temperatureValue);
-        if (history.size() > 20) {
-            for (Iterator<String> it = history.iterator(); it.hasNext() && history.size() > 20;) {
-                it.next();
-                it.remove();
-            }
-        }
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putStringSet(historyKey, history);
-        editor.putString(lastCityValueKey, cityName);
-        editor.putFloat(lastTemperatureValueKey, temperatureValue);
-        editor.apply();
     }
 
     public String getLastCity() {
@@ -111,11 +114,6 @@ public class MainActivity extends AppCompatActivity implements Constants {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         float lastTemperature = sharedPref.getFloat(lastTemperatureValueKey, -1000.0f);
         return lastTemperature == -1000.0 ? "Unknown" : String.format("%.2f", lastTemperature);
-    }
-
-    public Set<String> getHistory() {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getStringSet(historyKey, new LinkedHashSet<>());
     }
 
     private Toolbar initToolbar() {
@@ -153,9 +151,20 @@ public class MainActivity extends AppCompatActivity implements Constants {
         });
     }
 
+    private void initDatabase() {
+        db = Room.databaseBuilder(
+                getApplicationContext(),
+                HistoryDatabase.class,
+                "history_database")
+                .allowMainThreadQueries()
+                .build();
+
+        historySource = new HistorySource(db.getHistoryDao());
+    }
+
     public void setHistoryFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_main_layout, new FragmentHistory());
+        fragmentTransaction.replace(R.id.fragment_main_layout, new FragmentHistory(historySource));
         fragmentTransaction.commit();
     }
 
