@@ -31,16 +31,12 @@ import com.degrizz.james.android_gkb.WeatherOracle.Database.Model.HistoryRecord;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentCities;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentHistory;
 import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMain;
+import com.degrizz.james.android_gkb.WeatherOracle.Fragments.FragmentMap;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements Constants {
     private final String lastCityValueKey = "last_city_value";
@@ -201,6 +197,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
     public void setMainFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_main_layout, new FragmentMain());
+        fragmentTransaction.commit();
+    }
+
+    public void setMapFragment() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_main_layout, new FragmentMap());
         fragmentTransaction.commit();
     }
 }

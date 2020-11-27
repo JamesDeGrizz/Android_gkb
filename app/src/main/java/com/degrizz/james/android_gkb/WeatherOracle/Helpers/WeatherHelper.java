@@ -3,6 +3,7 @@ package com.degrizz.james.android_gkb.WeatherOracle.Helpers;
 import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity;
 import com.degrizz.james.android_gkb.WeatherOracle.BuildConfig;
@@ -23,9 +24,48 @@ interface OpenWeather {
     Call<WeatherRequest> loadWeather(@Query("id") int id, @Query("appid") String keyApi);
 }
 
+interface OpenWeatherCoord {
+    @GET("data/2.5/weather")
+    Call<WeatherRequest> loadWeather(@Query("lat") int lat, @Query("lon") int lon, @Query("appid") String keyApi);
+}
+
 public class WeatherHelper {
     private static final String TAG = "WeatherHelper";
     private final static float KELVINS = 273.15f;
+
+    public static void getTemperatureInfo(double lat, double lng, AppCompatActivity parent) {
+        OpenWeatherCoord openWeather = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(OpenWeatherCoord.class);
+
+        openWeather.loadWeather((int) lat, (int) lng, BuildConfig.WEATHER_API_KEY).enqueue(new Callback<WeatherRequest>() {
+            @Override
+            public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
+                if (response.body() != null) {
+                    MainActivity mActivity = (MainActivity) parent;
+                    mActivity.runOnUiThread(() -> {
+                        float temp = response.body().getMain().getTemp() - KELVINS;
+                        mActivity.update("Unknown", "Unknown", temp);
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WeatherRequest> call, Throwable t) {
+                Log.e(TAG, "Fail URI");
+                AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+                builder.setMessage(R.string.alert_dialog_message)
+                        .setTitle(R.string.alert_dialog_title)
+                        .setPositiveButton(R.string.alert_dialog_positive_button_text, (dialog, id1) -> {
+                            dialog.cancel();
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
+    }
     
     public static void getTemperatureInfo(String city, String country, int id, BottomSheetDialogFragment parent) {
             OpenWeather openWeather = new Retrofit.Builder()
@@ -61,6 +101,5 @@ public class WeatherHelper {
                     parent.dismiss();
                 }
             });
-
     }
 }
