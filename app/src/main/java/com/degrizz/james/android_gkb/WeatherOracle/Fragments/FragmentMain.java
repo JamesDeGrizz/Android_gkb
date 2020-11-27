@@ -1,8 +1,5 @@
 package com.degrizz.james.android_gkb.WeatherOracle.Fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.degrizz.james.android_gkb.WeatherOracle.Activities.MainActivity;
@@ -27,7 +23,6 @@ import com.degrizz.james.android_gkb.WeatherOracle.CrystalBallView;
 import com.degrizz.james.android_gkb.WeatherOracle.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 public class FragmentMain extends Fragment implements Constants {
     public FragmentMain() {}
@@ -72,6 +67,12 @@ public class FragmentMain extends Fragment implements Constants {
         Picasso.get()
                 .load(R.drawable.location)
                 .into(locationImage);
+
+        View map = view.findViewById(R.id.show_map);
+        map.setOnClickListener((View v) -> {
+            MainActivity act = (MainActivity) getActivity();
+            act.setMapFragment();
+        });
 
         View about = view.findViewById(R.id.show_about);
         about.setOnClickListener((View v) -> {

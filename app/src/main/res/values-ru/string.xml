@@ -10,6 +10,7 @@
     <string name="onDayTextView">На день</string>
     <string name="onWeekTextView">На неделю</string>
     <string name="bottom_menu_location">Местоположение</string>
+    <string name="bottom_menu_map">Карта</string>
     <string name="bottom_menu_layout">О разработчике</string>
     <string name="infoTextViewClickMeText">Нажми меня!</string>
 
